@@ -28,7 +28,15 @@ let keyword s =
     | "return"  -> RETURN
     | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
-    | "while"   -> WHILE         
+    | "while"   -> WHILE
+    | "for"     -> FOR
+    | "until"   -> UNTIL
+    | "dountil" -> DOUNTIL
+    | "dowhile" -> DOWHILE  
+    | "do"      -> DO        
+    | "switch"  -> SWITCH
+    | "case"    -> CASE 
+    | "default" -> DEFAULT
     | _         -> NAME s   // 缺省情况，是标识符的名字，如 函数名，变量名等
                             // 当所有的关键字没有匹配成功时，则当成标识符
 // 字符串转义符处理函数
@@ -87,6 +95,8 @@ rule Token = parse          // 每个 规则rule 会生成为一个函数，函�
   | ']'             { RBRACK }
   | ';'             { SEMI }
   | ','             { COMMA }
+  | "?"             { QUE }
+  | ':'             { COLON }           (*case case*)
   | "//"            { EndLineComment lexbuf; Token lexbuf }  //单行注释处理规则，调用响应处理函数
                                                              //参数是 lexbuf
                                                              // 处理完后 lexbuf 内容已经更新，注释部分过滤

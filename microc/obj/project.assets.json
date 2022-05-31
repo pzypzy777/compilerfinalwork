@@ -230,11 +230,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\microc\\interpc.fsproj",
+      "projectUniqueName": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\interpc.fsproj",
       "projectName": "interpc",
-      "projectPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\microc\\interpc.fsproj",
+      "projectPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\interpc.fsproj",
       "packagesPath": "C:\\Users\\86159\\.nuget\\packages\\",
-      "outputPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\microc\\obj\\",
+      "outputPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\86159\\AppData\\Roaming\\NuGet\\NuGet.Config"

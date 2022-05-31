@@ -107,6 +107,20 @@ type store = Map<address, int>
 //空存储
 let emptyStore = Map.empty<address, int>
 
+let arraysize = Map.empty<string, int>.Add("a", 10)
+
+(* The store is initialized with the global environment *)
+
+let mutable currentname = "" // 当前变量名
+
+let mutable thissize = 1    // 当前空间大小
+
+let mutable thisname = ""   // 当前空间名称
+
+(* The interpreter: *)
+
+(* The interpreter *)
+
 //保存value到存储store
 let setSto (store: store) addr value = store.Add(addr, value)
 
@@ -117,8 +131,10 @@ let getSto (store: store) addr = store.Item addr
 // 用于数组分配
 let rec initSto loc n store =
     if n = 0 then
+        let arraysize = Map.empty<string, int>.Add(thisname, thissize)
         store
     else // 默认值 0
+        let arraysize = Map.empty<string, int>.Add(thisname, thissize)
         initSto (loc + 1) (n - 1) (setSto store loc 0)
 
 (* Combined environment and store operations *)
@@ -206,7 +222,10 @@ let rec allocate (typ, x) (env0, nextloc) sto0 : locEnv * store =
     let (nextloc1, v, sto1) =
         match typ with
         //数组 调用 initSto 分配 i 个空间
-        | TypA (t, Some i) -> (nextloc + i, nextloc, initSto nextloc i sto0)
+        | TypA (t, Some i) -> 
+            thissize <- i
+            thisname <- x
+            (nextloc + i, nextloc, initSto nextloc i sto0)
         // 常规变量默认值是 0
         | _ -> (nextloc, 0, sto0)
 
@@ -286,8 +305,50 @@ let rec exec stmt (locEnv: locEnv) (gloEnv: gloEnv) (store: store) : store =
             | s1 :: sr -> loop sr (stmtordec s1 locEnv gloEnv store)
 
         loop stmts (locEnv, store)
-
-    | Return _ -> failwith "return not implemented" // 解释器没有实现 return
+    | Return e ->  match e with
+                  | Some e1 -> let (res ,store0) = eval e1 locEnv gloEnv store;
+                               let st = store0.Add(-1, res);
+                               (st)                     
+                  | None -> store
+    | For(e1,e2,e3,body) -> 
+          let (res ,store0) = eval e1 locEnv gloEnv store
+          let rec loop store1 =
+                //求值 循环条件,注意变更环境 store
+              let (v, store2) = eval e2 locEnv gloEnv store1
+                // 继续循环
+              if v<>0 then  
+                        let (reend ,store3) = eval e3 locEnv gloEnv (exec body locEnv gloEnv store2)
+                        loop store3
+                      else store2  
+          loop store0
+    | DoWhile(body,e) -> 
+      let rec loop store1 =
+                //求值 循环条件,注意变更环境 store
+              let (v, store2) = eval e locEnv gloEnv store1
+                // 继续循环
+              if v<>0 then loop (exec body locEnv gloEnv store2)
+                      else store2  //退出循环返回 环境store2
+      loop (exec body locEnv gloEnv store)
+    | DoUntil(body,e) -> 
+      let rec loop store1 =
+              let (v, store2) = eval e locEnv gloEnv  store1
+              if v=0 then loop (exec body locEnv gloEnv  store2)
+                     else store2    
+      loop (exec body locEnv gloEnv store)
+    | Switch(e,body) ->  
+              let (res, store1) = eval e locEnv gloEnv store
+              let rec choose list =
+                match list with
+                | Case(e1,body1) :: tail -> 
+                    let (res2, store2) = eval e1 locEnv gloEnv store1
+                    if res2=res then exec body1 locEnv gloEnv store2
+                                else choose tail
+                | [] -> store1
+                | Default( body1 ) :: tail -> 
+                    exec body1 locEnv gloEnv store1
+                    choose tail
+              (choose body)
+    | Case(e,body) -> exec body locEnv gloEnv store
 
 and stmtordec stmtordec locEnv gloEnv store =
     match stmtordec with
@@ -347,6 +408,12 @@ and eval e locEnv gloEnv store : int * store =
             | _ -> failwith ("unknown primitive " + ope)
 
         (res, store2)
+    | Prim3( e1, e2 , e3) ->
+        let (i1, store1) = eval e1 locEnv gloEnv store
+        let (i2, store2) = eval e2 locEnv gloEnv store1
+        let (i3, store3) = eval e3 locEnv gloEnv store2
+        if i1 = 0 then (i2,store3) 
+                      else (i3,store3) 
     | Andalso (e1, e2) ->
         let (i1, store1) as res = eval e1 locEnv gloEnv store
 
@@ -365,13 +432,18 @@ and eval e locEnv gloEnv store : int * store =
 
 and access acc locEnv gloEnv store : int * store =
     match acc with
-    | AccVar x -> (lookup (fst locEnv) x, store)
+    | AccVar x -> 
+        currentname <- x
+        (lookup (fst locEnv) x, store)
     | AccDeref e -> eval e locEnv gloEnv store
     | AccIndex (acc, idx) ->
         let (a, store1) = access acc locEnv gloEnv store
         let aval = getSto store1 a
         let (i, store2) = eval idx locEnv gloEnv store1
-        (aval + i, store2)
+        let size = arraysize.[currentname]
+        if(i>=size) then  failwith( " index out of size" )
+        elif(i<0) then failwith( " index out of size" )
+        else (aval + i, store2) 
 
 and evals es locEnv gloEnv store : int list * store =
     match es with
