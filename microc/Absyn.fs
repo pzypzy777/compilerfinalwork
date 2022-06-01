@@ -29,6 +29,7 @@ and expr =                           // 表达式，右值
   | Call of string * expr list       (* Function call f(...)        *)
   | Print of string * expr
   | Println of access
+  | Self of  access * string * expr  (* Self.f(...)                 *)
                                                                    
 and access =                         //左值，存储的位置                                            
   | AccVar of string                 (* Variable access        x    *) 
@@ -41,6 +42,7 @@ and stmt =
   | DoWhile of  stmt * expr          (* DoWhile loop                *)
   | DoUntil of stmt * expr           (* DoUntil loop                *)
   | For of expr * expr  * expr * stmt(* For loop                    *)
+  | Forin of access * expr *expr * stmt
   | Switch of expr * stmt list       (* Switch                      *)
   | Case of expr * stmt              (* Case                        *)
   | Default of stmt                  (* Default                     *)

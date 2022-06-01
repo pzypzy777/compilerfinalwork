@@ -30,6 +30,7 @@ let keyword s =
     | "void"    -> VOID 
     | "while"   -> WHILE
     | "for"     -> FOR
+    | "in"      -> IN
     | "until"   -> UNTIL
     | "dountil" -> DOUNTIL
     | "dowhile" -> DOWHILE  
@@ -75,7 +76,14 @@ rule Token = parse          // 每个 规则rule 会生成为一个函数，函�
   | '-'             { MINUS } 
   | '*'             { TIMES } 
   | '/'             { DIV } 
-  | '%'             { MOD }                     
+  | '%'             { MOD }
+  | "+="            { SELFPLUS }
+  | "-="            { SELFMINUS }
+  | "*="            { SELFTIMES }
+  | "/="            { SELFDIV }
+  | "%="            { SELFMOD } 
+  | "++"            { INC }
+  | "--"            { DECR }                    
   | '='             { ASSIGN } 
   | "=="            { EQ } 
   | "!="            { NE }

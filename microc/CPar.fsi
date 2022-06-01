@@ -28,6 +28,13 @@ type token =
   | TIMES
   | DIV
   | MOD
+  | INC
+  | DECR
+  | SELFPLUS
+  | SELFMINUS
+  | SELFTIMES
+  | SELFDIV
+  | SELFMOD
   | CHAR
   | ELSE
   | IF
@@ -46,6 +53,7 @@ type token =
   | SWITCH
   | CASE
   | DEFAULT
+  | IN
   | CSTSTRING of (string)
   | NAME of (string)
   | CSTINT of (int)
@@ -78,6 +86,13 @@ type tokenId =
     | TOKEN_TIMES
     | TOKEN_DIV
     | TOKEN_MOD
+    | TOKEN_INC
+    | TOKEN_DECR
+    | TOKEN_SELFPLUS
+    | TOKEN_SELFMINUS
+    | TOKEN_SELFTIMES
+    | TOKEN_SELFDIV
+    | TOKEN_SELFMOD
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF
@@ -96,6 +111,7 @@ type tokenId =
     | TOKEN_SWITCH
     | TOKEN_CASE
     | TOKEN_DEFAULT
+    | TOKEN_IN
     | TOKEN_CSTSTRING
     | TOKEN_NAME
     | TOKEN_CSTINT

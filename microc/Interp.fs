@@ -107,7 +107,7 @@ type store = Map<address, int>
 //空存储
 let emptyStore = Map.empty<address, int>
 
-let arraysize = Map.empty<string, int>.Add("a", 10)
+let mutable arraysize = Map.empty<string, int>
 
 (* The store is initialized with the global environment *)
 
@@ -131,10 +131,10 @@ let getSto (store: store) addr = store.Item addr
 // 用于数组分配
 let rec initSto loc n store =
     if n = 0 then
-        let arraysize = Map.empty<string, int>.Add(thisname, thissize)
+        arraysize <- Map.empty<string, int>.Add(thisname, thissize)
         store
     else // 默认值 0
-        let arraysize = Map.empty<string, int>.Add(thisname, thissize)
+        arraysize <- Map.empty<string, int>.Add(thisname, thissize)
         initSto (loc + 1) (n - 1) (setSto store loc 0)
 
 (* Combined environment and store operations *)
@@ -321,6 +321,27 @@ let rec exec stmt (locEnv: locEnv) (gloEnv: gloEnv) (store: store) : store =
                         loop store3
                       else store2  
           loop store0
+    | Forin(acc,e1,e2,body) -> 
+          let (loc, store1) = access acc locEnv gloEnv store
+          let (re, store2) = eval e1 locEnv gloEnv store1
+          let (re2,store3) = eval e2 locEnv gloEnv store2
+          match e1 with
+          | CstI i -> let rec loop i stores =
+                          if i<>(re2+1) then loop (i+1) (exec body locEnv gloEnv (setSto stores loc i) )
+                                    else (stores)
+                      loop re store3 
+          | Access acc -> match acc with
+                          | AccIndex(ac, idx) ->
+                            let rec loop i stores =
+                              match i with 
+                              | Access acc2 -> match acc2 with
+                                              | AccIndex(ac2, idx2) ->
+                                                let ( index,stores2) = eval idx2 locEnv gloEnv stores ;
+                                                if i<>e2 then let (result,s) = eval i locEnv gloEnv stores2
+                                                              loop (Access (AccIndex (ac,CstI (index+1)) ) ) (exec body locEnv gloEnv (setSto s loc result) )
+                                                         else let (result,s) = eval i locEnv gloEnv stores2
+                                                              exec body locEnv gloEnv (setSto s loc result) 
+                            loop e1 store3 
     | DoWhile(body,e) -> 
       let rec loop store1 =
                 //求值 循环条件,注意变更环境 store
@@ -414,6 +435,34 @@ and eval e locEnv gloEnv store : int * store =
         let (i3, store3) = eval e3 locEnv gloEnv store2
         if i1 = 0 then (i2,store3) 
                       else (i3,store3) 
+    | Self(acc,opt,e)-> let (loc, store1) = access acc locEnv gloEnv store
+                        let (mem1) = getSto store1 loc
+                        let (mem2, store2) = eval e locEnv gloEnv store
+                        let i1 =  mem1
+                        let i2 =  mem2
+                        match opt with
+                        | "*"  ->  let res =
+                                      i1 * i2
+                                   (res, setSto store2 loc res)
+                        | "+B"  -> let res =
+                                      i1 + i2
+                                   (res, setSto store2 loc res)
+                        | "-B"  -> let res =
+                                      i1 - i2
+                                   (res, setSto store2 loc res)
+                        | "+"  ->  let res =
+                                      i1 + i2
+                                   (mem1, setSto store2 loc res)
+                        | "-"  ->  let res =
+                                      i1 - i2
+                                   (mem1, setSto store2 loc res)
+                        | "/"  ->  let res =
+                                      i1 / i2
+                                   (res, setSto store2 loc res)
+                        | "%"  ->  let res =
+                                      i1 % i2
+                                   (res, setSto store2 loc res)
+                        | _    -> failwith ("unknown primitive " + opt)
     | Andalso (e1, e2) ->
         let (i1, store1) as res = eval e1 locEnv gloEnv store
 
