@@ -15,6 +15,5 @@ void main(int n) {
     a=10;
     a%=n;
     print("%d",a);
-
 }
 
