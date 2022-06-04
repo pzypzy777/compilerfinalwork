@@ -131,6 +131,8 @@ type VarEnv = (Var * typ) Env * int
 
 type Paramdecs = (typ * string) list
 type FunEnv = (label * typ option * Paramdecs) Env
+//代码指令列表
+type LabEnv = label list
 
 (* Bind declared variable in varEnv and generate code to allocate it: *)
 
@@ -195,6 +197,49 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
       let (jumptest, C1) = 
            makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C))
       addJump jumptest (Label labbegin :: cStmt body varEnv funEnv C1)
+    //如果要编译的stmt是DoWhile语句
+    | DoWhile(body, e) ->
+        let labbegin = newLabel()
+        let C1 = 
+            cExpr e varEnv funEnv (IFNZRO labbegin :: C)
+        Label labbegin :: cStmt body varEnv funEnv C1 //先执行body
+    //如果要编译的stmt是For语句
+    | For(dec, e, opera,body) ->
+        let labend   = newLabel()                       //结束label
+        let labbegin = newLabel()                       //设置label 
+        let labope   = newLabel()                       //设置 for(,,opera) 的label
+        let Cend = Label labend :: C
+        let (jumptest, C2) =                                                
+            makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: Cend)) 
+        let C3 = Label labope :: cExpr opera varEnv funEnv (addINCSP -1 C2)
+        let C4 = cStmt body varEnv funEnv C3    
+        cExpr dec varEnv funEnv (addINCSP -1 (addJump jumptest  (Label labbegin :: C4) ) ) //dec Label: body  opera  testjumpToBegin 指令的顺序
+     //如果要编译的stmt是DoUntil语句
+    | DoUntil(body,e) ->
+        let labbegin = newLabel()
+        let C1 = 
+            cExpr e varEnv funEnv (IFZERO labbegin :: C)
+        Label labbegin :: cStmt body varEnv funEnv C1
+    | Switch(e,cases)   ->
+        let (labend, C1) = addLabel C
+        let rec everycase c  = 
+            match c with
+            | Case(cond,body) :: tr ->
+                let (labnextbody,labnext,C2) = everycase tr
+                let (label, C3) = addLabel(cStmt body varEnv funEnv (addGOTO labnextbody C2))
+                let (label2, C4) = addLabel( cExpr (Prim2 ("==",e,cond)) varEnv funEnv (IFZERO labnext :: C3))
+                (label,label2,C4)
+            | Default( body ) :: tr -> 
+                let (labnextbody,labnext,C2) = everycase tr
+                let (label, C3) = addLabel(cStmt body varEnv funEnv (addGOTO labnextbody C2))
+                let (label2, C4) = addLabel(cExpr (Prim2 ("==",e,e)) varEnv funEnv (IFZERO labnext :: C3))
+                (label,label2,C4)
+        let (label,label2,C2) = everycase cases
+        C2
+    | Case(cond,body)  ->
+        C
+    | Default(body)  ->
+        C
     | Expr e -> 
       cExpr e varEnv funEnv (addINCSP -1 C) 
     | Block stmts -> 
@@ -246,6 +291,14 @@ and cExpr (e : expr) (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : inst
     | Assign(acc, e) -> cAccess acc varEnv funEnv (cExpr e varEnv funEnv (STI :: C))
     | CstI i         -> addCST i C
     | Addr acc       -> cAccess acc varEnv funEnv C
+    //输出
+    | Print(ope,e1)  ->
+         cExpr e1 varEnv funEnv
+            (match ope with
+            | "%d"  -> PRINTI :: C
+
+            )
+    | Println acc -> failwith("Error")
     | Prim1(ope, e1) ->
       cExpr e1 varEnv funEnv
           (match ope with
@@ -269,6 +322,11 @@ and cExpr (e : expr) (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : inst
             | ">"   -> SWAP :: LT :: C
             | "<="  -> SWAP :: LT :: addNOT C
             | _     -> failwith "unknown primitive 2"))
+    //三目运算
+    | Prim3(cond, e1, e2)    ->
+        let (jumpend, C1) = makeJump C
+        let (labelse, C2) = addLabel (cExpr e2 varEnv funEnv C1)
+        cExpr cond varEnv funEnv (IFZERO labelse :: cExpr e1 varEnv funEnv (addJump jumpend C2))
     | Andalso(e1, e2) ->
       match C with
       | IFZERO lab :: _ ->

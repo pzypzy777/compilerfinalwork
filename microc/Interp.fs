@@ -117,6 +117,8 @@ let mutable thissize = 1    // 当前空间大小
 
 let mutable thisname = ""   // 当前空间名称
 
+(* 这三个变量用于实现检查数组越界功能，存取数组的size和name *)
+
 (* The interpreter: *)
 
 (* The interpreter *)
@@ -490,6 +492,7 @@ and access acc locEnv gloEnv store : int * store =
         let aval = getSto store1 a
         let (i, store2) = eval idx locEnv gloEnv store1
         let size = arraysize.[currentname]
+        // 数组越界检查
         if(i>=size) then  failwith( " index out of size" )
         elif(i<0) then failwith( " index out of size" )
         else (aval + i, store2) 
