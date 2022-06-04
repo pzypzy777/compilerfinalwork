@@ -1,6 +1,3 @@
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.fsproj.AssemblyReference.cache
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfoInputs.cache
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfo.fs
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\microcc.exe
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\microcc.deps.json
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\microcc.runtimeconfig.json
@@ -21,6 +18,9 @@ D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\tr\FSharp.Core.resources.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\zh-Hans\FSharp.Core.resources.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\zh-Hant\FSharp.Core.resources.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.fsproj.AssemblyReference.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfoInputs.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfo.fs
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.fsproj.CopyComplete
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.pdb

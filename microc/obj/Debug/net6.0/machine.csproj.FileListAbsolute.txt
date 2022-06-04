@@ -1,0 +1,15 @@
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\machine.exe
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\machine.deps.json
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\machine.runtimeconfig.json
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\machine.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\machine.pdb
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.csproj.AssemblyReference.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.GeneratedMSBuildEditorConfig.editorconfig
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.AssemblyInfoInputs.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.AssemblyInfo.cs
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.csproj.CoreCompileInputs.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\refint\machine.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.pdb
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\machine.genruntimeconfig.cache
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\ref\machine.dll

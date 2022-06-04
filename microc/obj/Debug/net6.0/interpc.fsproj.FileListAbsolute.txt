@@ -25,9 +25,6 @@ D:\zucc\作业\大三下\编译原理\大作业\mycode\microc\obj\Debug\net6.0\i
 D:\zucc\作业\大三下\编译原理\大作业\mycode\microc\obj\Debug\net6.0\interpc.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\microc\obj\Debug\net6.0\interpc.pdb
 D:\zucc\作业\大三下\编译原理\大作业\mycode\microc\obj\Debug\net6.0\interpc.genruntimeconfig.cache
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.fsproj.AssemblyReference.cache
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.dll
-D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.pdb
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\interpc.exe
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\interpc.deps.json
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\interpc.runtimeconfig.json
@@ -48,7 +45,10 @@ D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\tr\FSharp.Core.resources.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\zh-Hans\FSharp.Core.resources.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\bin\Debug\net6.0\zh-Hant\FSharp.Core.resources.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.fsproj.AssemblyReference.cache
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.AssemblyInfoInputs.cache
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.AssemblyInfo.fs
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.fsproj.CopyComplete
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.dll
+D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.pdb
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\interpc.genruntimeconfig.cache

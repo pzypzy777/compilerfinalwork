@@ -103,6 +103,16 @@ let rec addCST i C =
     | (0, IFNZRO lab :: C1) -> C1
     | (_, IFNZRO lab :: C1) -> addGOTO lab C1
     | _                     -> CSTI i :: C
+
+//添加float
+let rec addCSTF i C = 
+    match (i, C) with
+    | _                     -> (CSTF (System.BitConverter.SingleToInt32Bits(float32(i)))) :: C
+
+//添加char
+let rec addCSTC i C = 
+    match (i, C) with
+    | _                     -> (CSTC ((int32)(System.BitConverter.ToInt16((System.BitConverter.GetBytes(char(i))),0)))) :: C
             
 (* ------------------------------------------------------------------- *)
 
@@ -197,13 +207,11 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
       let (jumptest, C1) = 
            makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C))
       addJump jumptest (Label labbegin :: cStmt body varEnv funEnv C1)
-    //如果要编译的stmt是DoWhile语句
     | DoWhile(body, e) ->
         let labbegin = newLabel()
         let C1 = 
             cExpr e varEnv funEnv (IFNZRO labbegin :: C)
         Label labbegin :: cStmt body varEnv funEnv C1 //先执行body
-    //如果要编译的stmt是For语句
     | For(dec, e, opera,body) ->
         let labend   = newLabel()                       //结束label
         let labbegin = newLabel()                       //设置label 
@@ -214,7 +222,6 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
         let C3 = Label labope :: cExpr opera varEnv funEnv (addINCSP -1 C2)
         let C4 = cStmt body varEnv funEnv C3    
         cExpr dec varEnv funEnv (addINCSP -1 (addJump jumptest  (Label labbegin :: C4) ) ) //dec Label: body  opera  testjumpToBegin 指令的顺序
-     //如果要编译的stmt是DoUntil语句
     | DoUntil(body,e) ->
         let labbegin = newLabel()
         let C1 = 
@@ -307,22 +314,30 @@ and cExpr (e : expr) (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : inst
     | Access acc     -> cAccess acc varEnv funEnv (LDI :: C)
     | Assign(acc, e) -> cAccess acc varEnv funEnv (cExpr e varEnv funEnv (STI :: C))
     | CstI i         -> addCST i C
+    | ConstFloat i      -> addCSTF i C     //浮点数
+    | ConstChar i       -> addCSTC i C   //字符
+    | ConstBool b       -> let res = 
+                               if b = true then 1
+                                           else 0
+                           addCST res C   //整数
     | Addr acc       -> cAccess acc varEnv funEnv C
     //输出
     | Print(ope,e1)  ->
          cExpr e1 varEnv funEnv
             (match ope with
             | "%d"  -> PRINTI :: C
-
+            | "%c"  -> PRINTC :: C
+            | "%f"  -> PRINTF :: C
             )
     | Println acc -> failwith("Error")
     | Prim1(ope, e1) ->
-      cExpr e1 varEnv funEnv
-          (match ope with
-           | "!"      -> addNOT C
-           | "printi" -> PRINTI :: C
-           | "printc" -> PRINTC :: C
-           | _        -> failwith "unknown primitive 1")
+        let rec tmp stat =
+                    match stat with
+                    | Access (c) -> c               //get IAccess
+        cExpr e1 varEnv funEnv
+            (match ope with
+            | "!"       -> addNOT C
+            | _         -> failwith "Error: unknown unary operator")
     | Prim2(ope, e1, e2) ->
       cExpr e1 varEnv funEnv
         (cExpr e2 varEnv funEnv
