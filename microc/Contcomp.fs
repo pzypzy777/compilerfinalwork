@@ -220,25 +220,42 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
         let C1 = 
             cExpr e varEnv funEnv (IFZERO labbegin :: C)
         Label labbegin :: cStmt body varEnv funEnv C1
+    | Forin(dec,i1,i2,body) ->
+        let rec tmp stat =
+                    match stat with
+                    | Access (c) -> c 
+        let rec idx stat =
+                    match stat with
+                    | AccIndex (acc,idx) -> idx
+        let rec address stat =
+                    match stat with
+                    | AccIndex (acc,idx) -> acc
+        match i1 with 
+        | _  -> 
+            let ass = Assign ( dec,i1)
+            let judge =  Prim2("<",Access dec,i2)  
+            let opera = Assign ( dec, Prim2("+",Access dec,CstI 1))
+            cStmt (For (ass,judge,opera,body))    varEnv funEnv C
     | Switch(e,cases)   ->
         let (labend, C1) = addLabel C
-        let rec everycase c  = 
-            match c with
+        let rec everycase case  = 
+            match case with
             | Case(cond,body) :: tr ->
                 let (labnextbody,labnext,C2) = everycase tr
                 let (label, C3) = addLabel(cStmt body varEnv funEnv (addGOTO labnextbody C2))
-                let (label2, C4) = addLabel( cExpr (Prim2 ("==",e,cond)) varEnv funEnv (IFZERO labnext :: C3))
+                let (label2, C4) = addLabel(cExpr (Prim2 ("==",e,cond)) varEnv funEnv (IFZERO labnext :: C3))
                 (label,label2,C4)
             | Default( body ) :: tr -> 
                 let (labnextbody,labnext,C2) = everycase tr
                 let (label, C3) = addLabel(cStmt body varEnv funEnv (addGOTO labnextbody C2))
                 let (label2, C4) = addLabel(cExpr (Prim2 ("==",e,e)) varEnv funEnv (IFZERO labnext :: C3))
                 (label,label2,C4)
+            | [] -> (labend, labend,C1)
         let (label,label2,C2) = everycase cases
         C2
     | Case(cond,body)  ->
         C
-    | Default(body)  ->
+    | Default(body)    ->
         C
     | Expr e -> 
       cExpr e varEnv funEnv (addINCSP -1 C) 
@@ -327,6 +344,35 @@ and cExpr (e : expr) (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : inst
         let (jumpend, C1) = makeJump C
         let (labelse, C2) = addLabel (cExpr e2 varEnv funEnv C1)
         cExpr cond varEnv funEnv (IFZERO labelse :: cExpr e1 varEnv funEnv (addJump jumpend C2))
+    | Self(acc,ope,e)->             
+        cExpr e varEnv funEnv
+            (match ope with
+            | "+" -> 
+                let ass = Assign (acc,Prim2("+",Access acc, e))
+                let C1 = cExpr ass varEnv funEnv (CSTI 1 :: SUB :: C)
+                (addINCSP -1 C1)
+            | "-" ->
+                let ass = Assign (acc,Prim2("-",Access acc, e))
+                let C1 = cExpr ass varEnv funEnv (CSTI 1 :: ADD :: C)
+                (addINCSP -1 C1)
+            | "+B" -> 
+                let ass = Assign (acc,Prim2("+",Access acc, e))
+                let C1 = cExpr ass varEnv funEnv C
+                CSTI 1 :: ADD :: (addINCSP -1 C1)
+            | "-B" ->
+                let ass = Assign (acc,Prim2("-",Access acc, e))
+                let C1 = cExpr ass varEnv funEnv C
+                CSTI 1 :: SUB :: (addINCSP -1 C1)
+            | "*" -> 
+                let ass = Assign (acc,Prim2("*",Access acc, e))
+                cExpr ass varEnv funEnv (addINCSP -1 C)
+            | "/" ->
+                let ass = Assign (acc,Prim2("/",Access acc, e))
+                cExpr ass varEnv funEnv (addINCSP -1 C)
+            | "%" ->
+                let ass = Assign (acc,Prim2("%",Access acc, e))
+                cExpr ass varEnv funEnv (addINCSP -1 C)
+            | _         -> failwith "Error: unknown unary operator")
     | Andalso(e1, e2) ->
       match C with
       | IFZERO lab :: _ ->
