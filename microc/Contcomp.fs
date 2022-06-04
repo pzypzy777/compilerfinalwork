@@ -181,6 +181,13 @@ let makeGlobalEnvs(topdecs : topdec list) : VarEnv * FunEnv * instr list =
             let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
             let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
             (varEnvr, funEnvr, code1 @ coder)
+          | VariableDeclareAndAssign (typ, x, e) -> 
+                //allocate函数对变量绑定分配,返回变量环境varEnv1和虚拟机操作code1
+                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv structTypEnv
+                 //递归更新
+                let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv1 funEnv structTypEnv
+                //添加 访问变量x的代码
+                (varEnvr, funEnvr, structTypEnvr, code1 @ (cAccess (AccVar(x)) varEnvr funEnvr [] structTypEnv (cExpr e varEnvr funEnvr [] structTypEnv (STI :: (addINCSP -1 coder)))))
           | Fundec (tyOpt, f, xs, body) ->
             addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv)
     addv topdecs ([], 0) []
@@ -264,6 +271,15 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
         C
     | Default(body)    ->
         C
+    //Break
+    | Break ->
+        let labend = headlab lablist
+        addGOTO labend C
+     //Continue
+    | Continue ->
+        let lablist   = dellab lablist
+        let labbegin = headlab lablist
+        addGOTO labbegin C
     | Expr e -> 
       cExpr e varEnv funEnv (addINCSP -1 C) 
     | Block stmts -> 
@@ -285,7 +301,24 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
       RET (snd varEnv - 1) :: deadcode C
     | Return (Some e) -> 
       cExpr e varEnv funEnv (RET (snd varEnv) :: deadcode C)
-
+//try
+and tryStmt tryBlock (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (structEnv : StructTypeEnv) (C : instr list) : instr list * VarEnv = 
+    match tryBlock with
+    | Block stmts ->
+        let rec pass1 stmts ((_, fdepth) as varEnv) = 
+            match stmts with
+            | []        -> ([], fdepth,varEnv)
+            | s1::sr    ->
+                let (_, varEnv1) as res1 = bStmtordec s1 varEnv structEnv
+                let (resr, fdepthr,varEnv2) = pass1 sr varEnv1
+                (res1 :: resr, fdepthr,varEnv2)
+        let (stmtsback, fdepthend,varEnv1) = pass1 stmts varEnv
+        let rec pass2 pairs C =
+            match pairs with
+            | [] -> C            
+            | (BDec code, varEnv)  :: sr -> code @ pass2 sr C
+            | (BStmt stmt, varEnv) :: sr -> cStmt stmt varEnv funEnv lablist structEnv (pass2 sr C)
+        (pass2 stmtsback (addINCSP(snd varEnv - fdepthend) C),varEnv1)
 and bStmtordec stmtOrDec varEnv : bstmtordec * VarEnv =
     match stmtOrDec with 
     | Stmt stmt    ->

@@ -78,6 +78,11 @@ type token =
   | CASE
   | DEFAULT
   | IN
+  | TRY
+  | CATCH
+  | THROW
+  | BREAK
+  | CONTINUE
   | CSTBOOL of (bool)
   | CSTFLOAT of (float32)
   | CSTCHAR of (char)
@@ -149,6 +154,11 @@ type tokenId =
     | TOKEN_CSTINT
     | TOKEN_end_of_input
     | TOKEN_error
+    | TOKEN_TRY
+    | TOKEN_CATCH
+    | TOKEN_THROW
+    | TOKEN_BREAK
+    | TOKEN_CONTINUE
 // This type is used to give symbolic names to token indexes, useful for error messages
 type nonTerminalId = 
     | NONTERM__startMain
@@ -242,7 +252,11 @@ let tagOfToken (t:token) =
   | CSTSTRING _ -> 58 
   | NAME _ -> 59 
   | CSTINT _ -> 60 
-
+  | TRY  -> 61 
+  | CATCH  -> 62
+  | THROW  -> 63 
+  | BREAK  -> 64
+  | CONTINUE  -> 65
 // This function maps integer indexes to symbolic token ids
 let tokenTagToTokenId (tokenIdx:int) = 
   match tokenIdx with
@@ -307,8 +321,13 @@ let tokenTagToTokenId (tokenIdx:int) =
   | 58 -> TOKEN_CSTSTRING 
   | 59 -> TOKEN_NAME 
   | 60 -> TOKEN_CSTINT 
-  | 63 -> TOKEN_end_of_input
-  | 61 -> TOKEN_error
+  | 61 -> TOKEN_TRY 
+  | 62 -> TOKEN_CATCH 
+  | 63 -> TOKEN_THROW 
+  | 64 -> TOKEN_BREAK 
+  | 65 -> TOKEN_CONTINUE 
+  | 68 -> TOKEN_end_of_input
+  | 66 -> TOKEN_error
   | _ -> failwith "tokenTagToTokenId: bad token"
 
 /// This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production

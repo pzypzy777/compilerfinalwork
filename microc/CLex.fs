@@ -41,6 +41,11 @@ let keyword s =
     | "do"      -> DO        
     | "switch"  -> SWITCH
     | "case"    -> CASE 
+    | "break"   -> BREAK 
+    | "continue"-> CONTINUE
+    | "try"     -> TRY
+    | "catch"   -> CATCH
+    | "throw"   -> THROW
     | "default" -> DEFAULT
     | _         -> NAME s   // 缺省情况，是标识符的名字，如 函数名，变量名等
                             // 当所有的关键字没有匹配成功时，则当成标识符
