@@ -23,6 +23,7 @@ type token =
   | LT
   | GE
   | LE
+  | BOOL
   | PLUS
   | MINUS
   | TIMES
@@ -55,12 +56,12 @@ type token =
   | CASE
   | DEFAULT
   | IN
+  | CSTBOOL of (bool)
   | CSTFLOAT of (float32)
   | CSTCHAR of (char)
   | CSTSTRING of (string)
   | NAME of (string)
   | CSTINT of (int)
-  | CSTBOOL of (int)
 type tokenId = 
     | TOKEN_EOF
     | TOKEN_LPAR
@@ -84,6 +85,7 @@ type tokenId =
     | TOKEN_LT
     | TOKEN_GE
     | TOKEN_LE
+    | TOKEN_BOOL
     | TOKEN_PLUS
     | TOKEN_MINUS
     | TOKEN_TIMES
@@ -116,12 +118,12 @@ type tokenId =
     | TOKEN_CASE
     | TOKEN_DEFAULT
     | TOKEN_IN
+    | TOKEN_CSTBOOL
     | TOKEN_CSTFLOAT
     | TOKEN_CSTCHAR
     | TOKEN_CSTSTRING
     | TOKEN_NAME
     | TOKEN_CSTINT
-    | TOKEN_CSTBOOL
     | TOKEN_end_of_input
     | TOKEN_error
 type nonTerminalId = 
@@ -146,9 +148,10 @@ type nonTerminalId =
     | NONTERM_Exprs
     | NONTERM_Exprs1
     | NONTERM_Const
-    | NONTERM_Type
     | NONTERM_ConstFloat
     | NONTERM_ConstChar
+    | NONTERM_ConstBool
+    | NONTERM_Type
     | NONTERM_StmtCase
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int

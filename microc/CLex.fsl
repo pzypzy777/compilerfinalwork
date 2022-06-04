@@ -19,15 +19,16 @@ let keyword s =
     match s with
     | "char"    -> CHAR    // 返回对应的Token ,Token 定义于 CPar.fsl 文件中
     | "else"    -> ELSE
-    | "false"   -> CSTBOOL 0
     | "if"      -> IF
     | "int"     -> INT
     | "float"   -> FLOAT 
+    | "bool"    -> BOOL
+    | "false"   -> CSTBOOL false
+    | "true"    -> CSTBOOL true
     | "null"    -> NULL
     | "print"   -> PRINT
     | "println" -> PRINTLN
     | "return"  -> RETURN
-    | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
     | "while"   -> WHILE
     | "for"     -> FOR
@@ -68,7 +69,7 @@ rule Token = parse          // 每个 规则rule 会生成为一个函数，函�
                             //  System.Int32.Parse 将 字符串转换为 int 类型
                             // 在 CPar 中  词元CSTINT 的语义值的类型是int  %token <int> CSTINT
                             //  CSTINT 需要一个整数作为参数
-
+  | ("false"|"true")    { CSTBOOL ( System.Boolean.Parse (lexemeAsString lexbuf )   ) }
   | ['0'-'9']+'.'['0'-'9']+ 
                     { CSTFLOAT (System.Single.Parse (lexemeAsString lexbuf)) } 
   | ['a'-'z''A'-'Z']['a'-'z''A'-'Z''0'-'9']*

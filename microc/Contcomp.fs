@@ -316,6 +316,10 @@ and cExpr (e : expr) (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : inst
     | CstI i         -> addCST i C
     | ConstFloat i      -> addCSTF i C     //浮点数
     | ConstChar i       -> addCSTC i C   //字符
+    | ConstBool b       -> let res = 
+                               if b = true then 1
+                                           else 0
+                           addCST res C   //整数
     | Addr acc       -> cAccess acc varEnv funEnv C
     //输出
     | Print(ope,e1)  ->
