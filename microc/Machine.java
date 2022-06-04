@@ -16,6 +16,8 @@ import java.io.*;
 import java.util.*;
 
 class Machine {
+  static char[] charlist = new char[100];
+  static float[] floatlist = new float[100];
   public static void main(String[] args)        
     throws FileNotFoundException, IOException {
     if (args.length == 0) 
@@ -35,7 +37,8 @@ class Machine {
     GOTO = 16, IFZERO = 17, IFNZRO = 18, CALL = 19, TCALL = 20, RET = 21, 
     PRINTI = 22, PRINTC = 23, 
     LDARGS = 24,
-    STOP = 25;
+    STOP = 25,
+    CSTF = 26, CSTC = 27, PRINTF = 28;
 
   final static int STACKSIZE = 1000;
   
@@ -66,6 +69,14 @@ class Machine {
       switch (p[pc++]) {
       case CSTI:
         s[sp+1] = p[pc++]; sp++; break;
+      case CSTF:
+        int currentpc = pc;
+        floatlist[currentpc] = Float.intBitsToFloat(p[currentpc+1]);
+        s[sp + 1] = p[pc++];
+        sp++; break;
+      case CSTC:
+        s[sp + 1] = (char)(p[pc++]); 
+        sp++; break;
       case ADD: 
         s[sp-1] = s[sp-1] + s[sp]; sp--; break;
       case SUB: 
@@ -127,6 +138,8 @@ class Machine {
         System.out.print(s[sp] + " "); break; 
       case PRINTC:
         System.out.print((char)(s[sp])); break; 
+      case PRINTF:
+        System.out.print(Float.intBitsToFloat(s[sp])); break;
       case LDARGS:
 	for (int i=0; i<iargs.length; i++) // Push commandline arguments
 	  s[++sp] = iargs[i];
@@ -145,6 +158,8 @@ class Machine {
   static String insname(int[] p, int pc) {
     switch (p[pc]) {
     case CSTI:   return "CSTI " + p[pc+1]; 
+    case CSTF:   return "CSTF " + floatlist[p[pc+1]];
+    case CSTC:   return "CSTC " + (char)(p[pc+1]);
     case ADD:    return "ADD";
     case SUB:    return "SUB";
     case MUL:    return "MUL";
