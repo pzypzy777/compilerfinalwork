@@ -256,6 +256,9 @@ let initEnvAndStore (topdecs: topdec list) : locEnv * funEnv * store =
 
         //全局函数 将声明(f,(xs,body))添加到全局函数环境 funEnv
         | Fundec (_, f, xs, body) :: decr -> addv decr locEnv ((f, (xs, body)) :: funEnv) store
+        | VariableDeclareAndAssign (typ,x,e) :: decr ->
+          let (locEnv1, sto1) = allocate (typ, x) locEnv store
+          addv decr locEnv1 funEnv sto1 
 
     // ([], 0) []  默认全局环境
     // locEnv ([],0) 变量环境 ，变量定义为空列表[],下一个空闲地址为0
@@ -377,6 +380,10 @@ and stmtordec stmtordec locEnv gloEnv store =
     match stmtordec with
     | Stmt stmt -> (locEnv, exec stmt locEnv gloEnv store)
     | Dec (typ, x) -> allocate (typ, x) locEnv store
+    | DeclareAndAssign(typ, x,e) -> let (loc,store1) = allocate (typ, x)  locEnv store
+                                    let (loc2, store2) = access (AccVar x) loc gloEnv store1
+                                    let (res, store3) =  eval e loc gloEnv store2
+                                    (loc, setSto store3 loc2 res) 
 
 (* Evaluating micro-C expressions *)
 

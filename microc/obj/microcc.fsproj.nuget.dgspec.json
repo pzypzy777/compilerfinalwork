@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pzy\\Desktop\\编译原理大作业\\compilerfinalwork\\microc\\microcc.fsproj": {}
+    "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\microcc.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\pzy\\Desktop\\编译原理大作业\\compilerfinalwork\\microc\\microcc.fsproj": {
+    "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\microcc.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pzy\\Desktop\\编译原理大作业\\compilerfinalwork\\microc\\microcc.fsproj",
+        "projectUniqueName": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\microcc.fsproj",
         "projectName": "microcc",
-        "projectPath": "C:\\Users\\pzy\\Desktop\\编译原理大作业\\compilerfinalwork\\microc\\microcc.fsproj",
-        "packagesPath": "C:\\Users\\pzy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pzy\\Desktop\\编译原理大作业\\compilerfinalwork\\microc\\obj\\",
+        "projectPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\microcc.fsproj",
+        "packagesPath": "C:\\Users\\86159\\.nuget\\packages\\",
+        "outputPath": "D:\\zucc\\作业\\大三下\\编译原理\\大作业\\mycode\\compilerfinalwork\\microc\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\pzy\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\86159\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -60,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

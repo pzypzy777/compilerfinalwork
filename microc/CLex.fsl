@@ -42,9 +42,6 @@ let keyword s =
     | "default" -> DEFAULT
     | "break"   -> BREAK 
     | "continue"-> CONTINUE
-    | "try"     -> TRY
-    | "catch"   -> CATCH
-    | "throw"   -> THROW
     | _         -> NAME s   // 缺省情况，是标识符的名字，如 函数名，变量名等
                             // 当所有的关键字没有匹配成功时，则当成标识符
 // 字符串转义符处理函数
@@ -119,6 +116,7 @@ rule Token = parse          // 每个 规则rule 会生成为一个函数，函�
                                                              // 处理完后 lexbuf 内容已经更新，注释部分过滤
                                                              //调用 Token 规则函数继续注释部分后面的处理
   | "/*"            { Comment lexbuf; Token lexbuf }   // 多行注释，调用 Comment规则
+  | "(*"            { Comment lexbuf; Token lexbuf }   // 多行注释，调用 Comment规则
   | '"'             { CSTSTRING (String [] lexbuf) }   // 调用字符串处理规则
   | ['\'']['a'-'z''A'-'Z''0'-'9']['\'']            
                     { try let single = lexemeAsString lexbuf in CSTCHAR (System.Char.Parse(single.Substring(1, 1))) with ex -> failwith "Char literal error." }
@@ -128,6 +126,8 @@ rule Token = parse          // 每个 规则rule 会生成为一个函数，函�
 and Comment = parse
    | "/*"           { Comment lexbuf; Comment lexbuf }  // 注释的嵌套处理
    | "*/"           { () }                           // 注释处理结束
+   | "(*"           { Comment lexbuf; Comment lexbuf }  // 注释的嵌套处理
+   | "*) "           { () }                           // 注释处理结束
    | '\n'           { lexbuf.EndPos <- lexbuf.EndPos.NextLine; Comment lexbuf } //注释跨行处理
    | (eof | '\026') { failwith "Lexer error: unterminated comment" }  // 多行注释未封闭
    | _              { Comment lexbuf }  // 其他任意情况都继续处理后续字符

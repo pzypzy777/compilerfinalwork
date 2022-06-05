@@ -15,8 +15,8 @@ type typ =
   | TypC                             (* Type char                   *)
   | TypA of typ * int option         (* Array type                  *)
   | TypP of typ                      (* Pointer type                *)
-  | TypF                             (* Type float                   *)
-  | TypB                             (* Type bool                   *)
+  | TypF
+  | TypB 
                                                                    
 and expr =                           // 表达式，右值                                                
   | Access of access                 (* x    or  *p    or  a[e]     *) //访问左值（右值）
@@ -56,14 +56,8 @@ and stmt =
   | Block of stmtordec list          (* Block: grouping and scope   *)
   | Break
   | Continue
-  | Throw of Exception
-  | Try of stmt * stmt list
-  | Catch of expr * stmt
   // 语句块内部，可以是变量声明 或语句的列表                                                              
 
-and Exception = 
-  | Exception of string
-  
 and stmtordec =                                                    
   | Dec of typ * string              (* Local variable declaration  *)
   | Stmt of stmt                     (* A statement                 *)
