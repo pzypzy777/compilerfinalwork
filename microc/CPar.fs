@@ -502,7 +502,11 @@ let token_to_string (t:token) =
   | CSTSTRING _ -> "CSTSTRING" 
   | NAME _ -> "NAME" 
   | CSTINT _ -> "CSTINT" 
-
+  | BREAK -> "BREAK" 
+  | CONTINUE -> "CONTINUE"
+  | TRY  -> "TRY"
+  | CATCH  -> "CATCH"
+  | THROW  -> "THROW"
 // This function gets the data carried by a token as an object
 let _fsyacc_dataOfToken (t:token) = 
   match t with 

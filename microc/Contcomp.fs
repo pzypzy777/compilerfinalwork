@@ -181,16 +181,18 @@ let makeGlobalEnvs(topdecs : topdec list) : VarEnv * FunEnv * instr list =
             let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
             let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
             (varEnvr, funEnvr, code1 @ coder)
-          | VariableDeclareAndAssign (typ, x, e) -> 
-                //allocate函数对变量绑定分配,返回变量环境varEnv1和虚拟机操作code1
-                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv structTypEnv
-                 //递归更新
-                let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv1 funEnv structTypEnv
-                //添加 访问变量x的代码
-                (varEnvr, funEnvr, structTypEnvr, code1 @ (cAccess (AccVar(x)) varEnvr funEnvr [] structTypEnv (cExpr e varEnvr funEnvr [] structTypEnv (STI :: (addINCSP -1 coder)))))
-          | Fundec (tyOpt, f, xs, body) ->
-            addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv)
+          | VariableDeclareAndAssign (typ, var, e) ->
+                let (varEnv1, code1) = allocate Glovar (typ, var) varEnv
+                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
+
+                (varEnvr,
+                  funEnvr,
+                  code1
+                  @ coder
+                    @ (cAccess (AccVar(var)) varEnvr funEnvr [])
+                      @ (cExpr e varEnv funEnv []) @ [ STI; INCSP -1 ])
     addv topdecs ([], 0) []
+
     
 (* ------------------------------------------------------------------- *)
 

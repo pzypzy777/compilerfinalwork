@@ -25,3 +25,8 @@ D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.dll
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.pdb
 D:\zucc\作业\大三下\编译原理\大作业\mycode\compilerfinalwork\microc\obj\Debug\net6.0\microcc.genruntimeconfig.cache
+C:\Users\pzy\Desktop\编译原理大作业\compilerfinalwork\microc\obj\Debug\net6.0\microcc.fsproj.AssemblyReference.cache
+C:\Users\pzy\Desktop\编译原理大作业\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfoInputs.cache
+C:\Users\pzy\Desktop\编译原理大作业\compilerfinalwork\microc\obj\Debug\net6.0\microcc.AssemblyInfo.fs
+C:\Users\pzy\Desktop\编译原理大作业\compilerfinalwork\microc\obj\Debug\net6.0\microcc.dll
+C:\Users\pzy\Desktop\编译原理大作业\compilerfinalwork\microc\obj\Debug\net6.0\microcc.pdb
