@@ -285,13 +285,6 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instr list) : instr 
       RET (snd varEnv - 1) :: deadcode C
     | Return (Some e) -> 
       cExpr e varEnv funEnv (RET (snd varEnv) :: deadcode C)
-    // | Break ->
-    //   let label = exit lablist
-    //   addGOTO label C
-    // | Continue ->
-    //   let label = exitOne lablist
-    //   let labelBegin = exit label
-    //   addGOTO labelBegin C
 and bStmtordec stmtOrDec varEnv : bstmtordec * VarEnv =
     match stmtOrDec with 
     | Stmt stmt    ->

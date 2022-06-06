@@ -26,7 +26,7 @@ let nl = CstI 10 //  \n 的 ASCII 码
 %token <float32> CSTFLOAT
 %token <bool> CSTBOOL
 
-%token CHAR ELSE IF INT FLOAT NULL PRINT PRINTLN RETURN VOID WHILE FOR DOWHILE DOUNTIL DO UNTIL SWITCH CASE DEFAULT IN BREAK CONTINUE
+%token CHAR ELSE IF INT FLOAT NULL PRINT PRINTLN RETURN VOID WHILE FOR DOWHILE DOUNTIL DO UNTIL SWITCH CASE DEFAULT IN
 %token PLUS MINUS TIMES DIV MOD INC DECR SELFPLUS SELFMINUS SELFTIMES SELFDIV SELFMOD
 %token EQ NE GT LT GE LE BOOL
 %token NOT SEQOR SEQAND
@@ -160,8 +160,6 @@ StmtM:  /* No unbalanced if-else */
   | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtM     { For($3,$5,$7,$9)  }
   | FOR Access IN LPAR Expr COMMA Expr RPAR StmtM    { Forin($2,$5,$7,$9)   }
   | SWITCH LPAR Expr RPAR LBRACE StmtCase RBRACE        { Switch($3,$6)  }
-  | BREAK SEMI                          { Break             }
-  | CONTINUE SEMI                       { Continue          }
 ;
 
 StmtU:
